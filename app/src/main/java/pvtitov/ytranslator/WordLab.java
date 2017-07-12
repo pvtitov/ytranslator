@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +38,10 @@ public class WordLab {
         List<Word> words = new ArrayList<>();
         WordsCursorWrapper cursor = queryWords(null, null);
         try{
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()){
+            cursor.moveToLast();
+            while (!cursor.isBeforeFirst()){
                 words.add(cursor.getWord());
-                cursor.moveToNext();
+                cursor.moveToPrevious();
             }
         } finally {
             cursor.close();
@@ -62,7 +64,7 @@ public class WordLab {
         }
     }
 
-    public void addWord(Word word){
+    public void addNewWord(Word word){
         ContentValues values = getContentValues(word);
         database.insert(HistoryTable.NAME, null, values);
     }
@@ -74,9 +76,9 @@ public class WordLab {
         return values;
     }
 
-    public void updateDatabaseWithWord(Word word){
+    public void updateExsistingWord(Word word){
         ContentValues values = getContentValues(word);
-        database.update(HistoryTable.NAME, values, Collumns.WORD + "=?", new String[]{word.getWord()});
+        database.update(HistoryTable.NAME, values, Collumns.WORD + " = ? ", new String[]{word.getWord()});
     }
 
     private WordsCursorWrapper queryWords(String whereClause, String[] whereArgs){

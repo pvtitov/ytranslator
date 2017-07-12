@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 
 public class MainActivity extends AbstractFragmentActivity {
 
-    public static final String EXTRA_WORD_FROM_HISTORY = "paveltitov.yprompter.word_to_translate";
+    public static final String EXTRA_WORD_FROM_HISTORY = "paveltitov.ytranslator.word_to_translate";
 
     public static Intent createIntent(Context packageContext, String word){
         Intent intent = new Intent(packageContext, MainActivity.class);

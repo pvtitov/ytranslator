@@ -29,11 +29,12 @@ public class RequestFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Word word = new Word(inputField.getText().toString());
-                WordLab.getOrCreateWordLab(getActivity()).updateDatabaseWithWord(word);
+                WordLab.getOrCreateWordLab(getActivity()).addNewWord(word);
                 Intent intent = MainActivity.createIntent(getActivity(), word.getWord());
                 startActivity(intent);
             }
         });
+
         return view;
     }
 }
