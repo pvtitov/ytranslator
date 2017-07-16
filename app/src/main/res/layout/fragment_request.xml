@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/request_fragment"
-    >
+    android:orientation="horizontal"
+    android:id="@+id/request_fragment">
 
     <EditText
         android:id="@+id/input_field"
         android:layout_width="0dp"
-        android:layout_weight="4"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:selectAllOnFocus="true"
+        android:layout_weight="4"/>
+
+    <ImageButton
         android:id="@+id/go_button"
-        android:text="@string/button_name"/>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_button"
+        android:layout_weight="1"/>
+
 
 </LinearLayout>
