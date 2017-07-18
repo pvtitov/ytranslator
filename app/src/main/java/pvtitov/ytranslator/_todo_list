@@ -1,2 +1,1 @@
-detail activity in place of list
 change LayoutParams(?) of RequestFragment and add article to it if item of ListFragment is pressed
