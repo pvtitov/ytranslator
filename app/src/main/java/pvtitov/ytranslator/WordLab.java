@@ -24,7 +24,7 @@ public class WordLab {
     private Context context;
     private SQLiteDatabase database;
 
-    public static WordLab getOrCreateWordLab(Context context){
+    public static WordLab getSingleInstance(Context context){
         if (wordLab == null) wordLab = new WordLab(context);
         return wordLab;
     }

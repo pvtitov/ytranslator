@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 public class MainActivity extends FragmentActivity {
 
     private static final String EXTRA_WORD = "paveltitov.ytranslator.word";
+    private static final String EXTRA_TRANSLATION = "paveltitov.ytranslator.translation";
     private static final String EXTRA_SHOW_DETAIL = "paveltitov.ytranslator.show_detail";
     private static final String REQUEST_FRAGMENT_TAG = "paveltitov.yprompter.request_fragment";
     public static final String LIST_FRAGMENT_TAG = "paveltitov.yprompter.list_fragment";
@@ -18,6 +19,13 @@ public class MainActivity extends FragmentActivity {
     public static Intent createIntent(Context packageContext, String word){
         Intent intent = new Intent(packageContext, MainActivity.class);
         intent.putExtra(EXTRA_WORD, word);
+        return intent;
+    }
+
+    public static Intent createIntent(Context packageContext, String word, String translation){
+        Intent intent = new Intent(packageContext, MainActivity.class);
+        intent.putExtra(EXTRA_WORD, word);
+        intent.putExtra(EXTRA_TRANSLATION, translation);
         return intent;
     }
 
@@ -60,7 +68,7 @@ public class MainActivity extends FragmentActivity {
 
 
     protected Fragment createRequestFragment() {
-        String word = (String) getIntent().getStringExtra(EXTRA_WORD);
+        String word = getIntent().getStringExtra(EXTRA_WORD);
         return RequestFragment.newInstance(word);
     }
 

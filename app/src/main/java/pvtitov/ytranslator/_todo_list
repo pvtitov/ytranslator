@@ -1,1 +1,7 @@
-change LayoutParams(?) of RequestFragment and add article to it if item of ListFragment is pressed
+Make the app actually translate.
+compile 'com.google.code.gson:gson:2.6.1' - needed?
+TranslationModel() - no parameters - needed?
+Input text must be String[] to suit TranslationModel
+Translation direction
+reduce list in HttpPostRequest interface
+rename HttpPostRequest to HttpApiService

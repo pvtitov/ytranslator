@@ -1,6 +1,8 @@
 package pvtitov.ytranslator;
 
 
+import java.util.ArrayList;
+
 /**
  * Created by Павел on 07.06.2017.
  */
@@ -11,8 +13,13 @@ public class Word{
 
     public Word(String word){
         setWord(word);
-        setTranslation("Перевод - " + word);
     }
+
+    public Word(String word, String translation){
+        setWord(word);
+        setTranslation(translation);
+    }
+
 
     public String getWord() {
         return word;

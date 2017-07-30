@@ -31,7 +31,7 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.list_fragment);
+        recyclerView = view.findViewById(R.id.list_fragment);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
@@ -41,7 +41,7 @@ public class ListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Word> words = WordLab.getOrCreateWordLab(getActivity()).getListOfWords();
+        List<Word> words = WordLab.getSingleInstance(getActivity()).getListOfWords();
         if (listAdapter == null) {
             listAdapter = new ListAdapter(words);
             recyclerView.setAdapter(listAdapter);
@@ -60,8 +60,8 @@ public class ListFragment extends Fragment {
             super(itemView);
             itemView.setOnClickListener(this);
 
-            wordTextView = (TextView) itemView.findViewById(R.id.list_item_text_word);
-            translationTextView = (TextView) itemView.findViewById(R.id.list_item_text_translation);
+            wordTextView = itemView.findViewById(R.id.list_item_text_word);
+            translationTextView = itemView.findViewById(R.id.list_item_text_translation);
         }
 
         public void bindDataToItem(Word w){
