@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pvtitov.ytranslator.http_client.HttpApiService;
 import pvtitov.ytranslator.http_client.RetrofitLab;
@@ -30,7 +30,8 @@ public class RequestFragment extends Fragment{
     private  static final String ARGUMENTS_WORD = "word";
     private static final String BASE_URL = "https://translate.yandex.net";
     private static final String API_KEY = "trnsl.1.1.20170403T203024Z.e1c296e170563e6b.112043154a95d73055b48634e4607682bdd23817";
-    private static final String TRANSLATION_DIRECTION = "en-ru";
+
+    String translationDirection;
 
     private EditText inputField;
     private ImageButton button;
@@ -54,9 +55,15 @@ public class RequestFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 final String word = inputField.getText().toString();
+                if (TextUtils.isEmpty(word)) {
+                    errorToast();
+                }
+                //translationDirection = "en-ru"; //by default
+                if (latin(word)) translationDirection = "en-ru";
+                if (cyrillic(word)) translationDirection = "ru-en";
 
                 final HttpApiService httpApiService = RetrofitLab.getSingleInstance(BASE_URL).create(HttpApiService.class);
-                Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, TRANSLATION_DIRECTION, word);
+                Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, translationDirection, word);
                 call.enqueue(new Callback<TranslationModel>() {
                     @Override
                     public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
@@ -68,12 +75,28 @@ public class RequestFragment extends Fragment{
 
                     @Override
                     public void onFailure(Call<TranslationModel> call, Throwable t) {
-                        Toast.makeText(getContext(), "oops", Toast.LENGTH_SHORT).show();
+                        errorToast();
                     }
                 });
             }
         });
 
         return view;
+    }
+
+    private boolean cyrillic(String string) {
+        Pattern pattern = Pattern.compile("^[а-яёЁА-Я]+$");
+        Matcher matcher = pattern.matcher(string);
+        return matcher.matches();
+    }
+
+    private boolean latin(String string) {
+        Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = pattern.matcher(string);
+        return matcher.matches();
+    }
+
+    private void errorToast(){
+        Toast.makeText(getContext(), "oops", Toast.LENGTH_SHORT).show();
     }
 }
