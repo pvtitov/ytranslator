@@ -19,7 +19,7 @@
         android:id="@+id/go_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_button"
+        android:src="@mipmap/ic_button"
         android:layout_weight="1"/>
 
 

@@ -26,9 +26,10 @@ public class MainActivity extends FragmentActivity {
         return intent;
     }
 
-    public static Intent createIntent(Context packageContext, String word, boolean showDetail){
+    public static Intent createIntent(Context packageContext, String word, String translation, boolean showDetail){
         Intent intent = new Intent(packageContext, MainActivity.class);
         intent.putExtra(EXTRA_WORD, word);
+        intent.putExtra(EXTRA_TRANSLATION, translation);
         intent.putExtra(EXTRA_SHOW_DETAIL, showDetail);
         return intent;
     }
@@ -37,7 +38,9 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (this.getIntent().getBooleanExtra(EXTRA_SHOW_DETAIL, false)){
-            setContentView(R.layout.container_activity_detail);
+            setContentView(R.layout.container_activity_with_article);
+            TextView textView = findViewById(R.id.article_temporary);
+            textView.setText(this.getIntent().getStringExtra(EXTRA_WORD) + " - " + this.getIntent().getStringExtra(EXTRA_TRANSLATION));
         } else {
             setContentView(R.layout.container_activity);
         }

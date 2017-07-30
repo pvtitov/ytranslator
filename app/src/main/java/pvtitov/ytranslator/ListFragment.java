@@ -72,7 +72,7 @@ public class ListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = MainActivity.createIntent(getActivity(), word.getWord(), true);
+            Intent intent = MainActivity.createIntent(getActivity(), word.getWord(), word.getTranslation(), true);
             startActivity(intent);
         }
     }

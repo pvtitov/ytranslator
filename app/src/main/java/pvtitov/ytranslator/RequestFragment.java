@@ -55,10 +55,10 @@ public class RequestFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 final String word = inputField.getText().toString();
-                if (TextUtils.isEmpty(word)) {
+                if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
                     errorToast();
+                    return;
                 }
-                //translationDirection = "en-ru"; //by default
                 if (latin(word)) translationDirection = "en-ru";
                 if (cyrillic(word)) translationDirection = "ru-en";
 

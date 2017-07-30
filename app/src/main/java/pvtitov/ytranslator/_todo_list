@@ -1,2 +1,5 @@
 more then 1 word of number will break the app
 refactor
+design:
+    material design style
+    Lists with CardView
