@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.text.method.LinkMovementMethod;
+import android.widget.TextView;
 
 
 public class MainActivity extends FragmentActivity {
@@ -16,11 +18,6 @@ public class MainActivity extends FragmentActivity {
     private static final String REQUEST_FRAGMENT_TAG = "paveltitov.yprompter.request_fragment";
     public static final String LIST_FRAGMENT_TAG = "paveltitov.yprompter.list_fragment";
 
-    public static Intent createIntent(Context packageContext, String word){
-        Intent intent = new Intent(packageContext, MainActivity.class);
-        intent.putExtra(EXTRA_WORD, word);
-        return intent;
-    }
 
     public static Intent createIntent(Context packageContext, String word, String translation){
         Intent intent = new Intent(packageContext, MainActivity.class);
@@ -64,6 +61,9 @@ public class MainActivity extends FragmentActivity {
                     .add(R.id.list_fragment_container, fragmentList, LIST_FRAGMENT_TAG)
                     .commit();
         }
+
+        TextView linkToYandex = findViewById(R.id.link_to_yandex);
+        linkToYandex.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 

@@ -1,7 +1,2 @@
-Make the app actually translate.
-compile 'com.google.code.gson:gson:2.6.1' - needed?
-TranslationModel() - no parameters - needed?
-Input text must be String[] to suit TranslationModel
-Translation direction
-reduce list in HttpPostRequest interface
-rename HttpPostRequest to HttpApiService
+more then 1 word of number will break the app
+refactor

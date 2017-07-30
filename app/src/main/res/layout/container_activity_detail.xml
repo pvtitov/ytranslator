@@ -18,4 +18,10 @@
         android:layout_weight="1"
         android:id="@+id/list_fragment_container"/>
 
+    <TextView
+        android:id="@+id/link_to_yandex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:linksClickable="true"
+        android:text="@string/link_to_yandex_translator"/>
 </LinearLayout>
