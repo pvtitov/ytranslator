@@ -1,5 +1,6 @@
 package pvtitov.ytranslator;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,6 +43,21 @@ public class RequestFragment extends Fragment{
         RequestFragment fragment = new RequestFragment();
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    public interface onTranslationListener {
+        public void onTranslation(Word word);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            callback = (onTranslationListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement onTranslationListener interface");
+        }
     }
 
     @Nullable
