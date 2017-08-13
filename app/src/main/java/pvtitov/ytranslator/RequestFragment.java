@@ -1,7 +1,6 @@
 package pvtitov.ytranslator;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,7 +31,8 @@ public class RequestFragment extends Fragment{
     private static final String BASE_URL = "https://translate.yandex.net";
     private static final String API_KEY = "trnsl.1.1.20170403T203024Z.e1c296e170563e6b.112043154a95d73055b48634e4607682bdd23817";
 
-    String translationDirection;
+    private String translationDirection;
+    private onTranslationListener callbackToActivity;
 
     private EditText inputField;
     private ImageButton button;
@@ -46,7 +46,7 @@ public class RequestFragment extends Fragment{
     }
 
     public interface onTranslationListener {
-        public void onTranslation(Word word);
+        void onTranslation(Word word);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RequestFragment extends Fragment{
         super.onAttach(context);
 
         try {
-            callback = (onTranslationListener) getActivity();
+            callbackToActivity = (onTranslationListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement onTranslationListener interface");
         }
@@ -84,9 +84,9 @@ public class RequestFragment extends Fragment{
                     @Override
                     public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
                         String translation = response.body().getText().get(0);
-                        WordLab.getSingleInstance(getActivity()).addNewWord(new Word(word, translation));
-                        Intent intent = MainActivity.createIntent(getActivity(), word, translation);
-                        startActivity(intent);
+                        Word objWord = new Word(word, translation);
+                        WordLab.getSingleInstance(getActivity()).addNewWord(objWord);
+                        callbackToActivity.onTranslation(objWord);
                     }
 
                     @Override

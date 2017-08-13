@@ -22,6 +22,12 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
 
+    //private onSelectWordListener callbackToActivity;
+
+    //public interface onSelectWordListener(Word word){
+
+    //}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

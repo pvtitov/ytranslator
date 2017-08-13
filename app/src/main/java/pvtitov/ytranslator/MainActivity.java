@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements RequestFragment.onTranslationListener {
 
     private static final String EXTRA_WORD = "paveltitov.ytranslator.word";
     private static final String EXTRA_TRANSLATION = "paveltitov.ytranslator.translation";
@@ -49,7 +50,8 @@ public class MainActivity extends FragmentActivity {
 
         Fragment requestFragment = fragmentManager.findFragmentById(R.id.request_fragment_container);
         if (requestFragment == null) {
-            requestFragment = createRequestFragment();
+            String word = getIntent().getStringExtra(EXTRA_WORD);
+            requestFragment = RequestFragment.newInstance(word);
             fragmentManager
                     .beginTransaction()
                     .add(R.id.request_fragment_container, requestFragment, REQUEST_FRAGMENT_TAG)
@@ -58,7 +60,7 @@ public class MainActivity extends FragmentActivity {
 
         Fragment fragmentList = fragmentManager.findFragmentById(R.id.list_fragment_container);
         if (fragmentList == null) {
-            fragmentList = createListFragment();
+            fragmentList = new ListFragment();
             fragmentManager
                     .beginTransaction()
                     .add(R.id.list_fragment_container, fragmentList, LIST_FRAGMENT_TAG)
@@ -70,12 +72,9 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-    protected Fragment createRequestFragment() {
-        String word = getIntent().getStringExtra(EXTRA_WORD);
-        return RequestFragment.newInstance(word);
-    }
-
-    protected Fragment createListFragment() {
-        return new ListFragment();
+    @Override
+    public void onTranslation(Word word) {
+        Toast.makeText(this, word.getWord() + " - " + word.getTranslation(), Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager().beginTransaction().replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG).commit();
     }
 }
