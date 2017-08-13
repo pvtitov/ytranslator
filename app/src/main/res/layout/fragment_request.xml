@@ -13,14 +13,13 @@
         android:layout_height="wrap_content"
         android:selectAllOnFocus="true"
         android:inputType="text"
-        android:layout_weight="4"/>
+        android:layout_weight="1"/>
 
     <ImageButton
         android:id="@+id/go_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_button"
-        android:layout_weight="1"/>
+        android:src="@drawable/ic_play_circle_filled_black_100dp" />
 
 
 </LinearLayout>
