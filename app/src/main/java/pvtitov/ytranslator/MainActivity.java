@@ -11,7 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends FragmentActivity implements RequestFragment.onTranslationListener {
+public class MainActivity extends FragmentActivity
+        implements RequestFragment.onTranslationListener, ListFragment.onSelectWordListener{
 
     private static final String EXTRA_WORD = "paveltitov.ytranslator.word";
     private static final String EXTRA_TRANSLATION = "paveltitov.ytranslator.translation";
@@ -50,8 +51,7 @@ public class MainActivity extends FragmentActivity implements RequestFragment.on
 
         Fragment requestFragment = fragmentManager.findFragmentById(R.id.request_fragment_container);
         if (requestFragment == null) {
-            String word = getIntent().getStringExtra(EXTRA_WORD);
-            requestFragment = RequestFragment.newInstance(word);
+            requestFragment = RequestFragment.newInstance(null);
             fragmentManager
                     .beginTransaction()
                     .add(R.id.request_fragment_container, requestFragment, REQUEST_FRAGMENT_TAG)
@@ -74,7 +74,17 @@ public class MainActivity extends FragmentActivity implements RequestFragment.on
 
     @Override
     public void onTranslation(Word word) {
-        Toast.makeText(this, word.getWord() + " - " + word.getTranslation(), Toast.LENGTH_SHORT).show();
-        getSupportFragmentManager().beginTransaction().replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG)
+                .commit();
+    }
+
+    @Override
+    public void onSelectingWord(Word word) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.request_fragment_container, RequestFragment.newInstance(word.getWord()), REQUEST_FRAGMENT_TAG)
+                .commit();
     }
 }

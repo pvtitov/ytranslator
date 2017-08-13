@@ -1,5 +1,7 @@
 package pvtitov.ytranslator;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,11 +24,22 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
 
-    //private onSelectWordListener callbackToActivity;
+    private onSelectWordListener callbackToActivity;
 
-    //public interface onSelectWordListener(Word word){
+    public interface onSelectWordListener{
+        void onSelectingWord(Word word);
+    }
 
-    //}
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            callbackToActivity = (onSelectWordListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement onSelectWordListener interface");
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,8 +91,7 @@ public class ListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = MainActivity.createIntent(getActivity(), word.getWord(), word.getTranslation(), true);
-            startActivity(intent);
+            callbackToActivity.onSelectingWord(word);
         }
     }
 
