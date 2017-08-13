@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
+
 import java.util.List;
 
 
@@ -49,7 +53,12 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         recyclerView = view.findViewById(R.id.list_fragment);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getContext());
+        flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        flexboxLayoutManager.setJustifyContent(JustifyContent.SPACE_BETWEEN);
+        recyclerView.setLayoutManager(flexboxLayoutManager);
+
 
 
         updateUI();
@@ -71,20 +80,20 @@ public class ListFragment extends Fragment {
     private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Word word;
         private TextView wordTextView;
-        private TextView translationTextView;
+        //private TextView translationTextView;
 
         public ItemHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
             wordTextView = itemView.findViewById(R.id.list_item_text_word);
-            translationTextView = itemView.findViewById(R.id.list_item_text_translation);
+            //translationTextView = itemView.findViewById(R.id.list_item_text_translation);
         }
 
         public void bindDataToItem(Word w){
             word = w;
             wordTextView.setText(word.getWord());
-            translationTextView.setText(word.getTranslation());
+            //translationTextView.setText(word.getTranslation());
         }
 
         @Override
