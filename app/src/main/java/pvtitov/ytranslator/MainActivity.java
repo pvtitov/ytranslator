@@ -61,6 +61,5 @@ public class MainActivity extends FragmentActivity
                 .replace(R.id.request_fragment_container, RequestFragment.newInstance(word.getWord()), REQUEST_FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
-        Toast.makeText(this, word.getWord() + " - " + word.getTranslation(), Toast.LENGTH_SHORT).show();
     }
 }

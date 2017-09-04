@@ -1,10 +1,10 @@
 package pvtitov.ytranslator;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,13 +53,10 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         recyclerView = view.findViewById(R.id.list_fragment);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getContext());
         flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
         flexboxLayoutManager.setJustifyContent(JustifyContent.SPACE_BETWEEN);
         recyclerView.setLayoutManager(flexboxLayoutManager);
-
-
 
         updateUI();
 
@@ -80,25 +77,23 @@ public class ListFragment extends Fragment {
     private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Word word;
         private TextView wordTextView;
-        //private TextView translationTextView;
 
         public ItemHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
             wordTextView = itemView.findViewById(R.id.list_item_text_word);
-            //translationTextView = itemView.findViewById(R.id.list_item_text_translation);
         }
 
         public void bindDataToItem(Word w){
             word = w;
             wordTextView.setText(word.getWord());
-            //translationTextView.setText(word.getTranslation());
         }
 
         @Override
         public void onClick(View v) {
             callbackToActivity.onSelectingWord(word);
+            new SubstituteTask(wordTextView, word).execute();
         }
     }
 
@@ -131,6 +126,39 @@ public class ListFragment extends Fragment {
 
         public void setWords(List<Word> words) {
             this.list = words;
+        }
+    }
+
+    private class SubstituteTask extends AsyncTask<Void, Void, Void>{
+        private TextView textView;
+        private Word word;
+
+        private SubstituteTask(TextView textView, Word word){
+            this.textView = textView;
+            this.word = word;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            textView.setText(word.getTranslation());
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            textView.setText(word.getWord());
+            updateUI();
         }
     }
 }
