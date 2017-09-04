@@ -158,7 +158,6 @@ public class ListFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             textView.setText(word.getWord());
-            updateUI();
         }
     }
 }
