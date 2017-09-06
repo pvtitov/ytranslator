@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container_for_fragment">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="top"
         android:id="@+id/request_fragment_container"/>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/list_fragment_container"/>
+        android:layout_height="300dp"
+        android:layout_gravity="bottom"
+        android:id="@+id/list_fragment_container"
+        />
 
     <TextView
         android:id="@+id/link_to_yandex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:linksClickable="true"
+        android:layout_gravity="bottom"
         android:text="@string/link_to_yandex_translator"/>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
