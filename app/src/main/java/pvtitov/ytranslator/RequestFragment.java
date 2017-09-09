@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
@@ -26,16 +25,15 @@ import retrofit2.Response;
  * Created by Павел on 11.06.2017.
  */
 
-public class RequestFragment extends Fragment{
+public class RequestFragment extends Fragment implements MainActivity.OnClickButtonListener{
     private  static final String ARGUMENTS_WORD = "word";
     private static final String BASE_URL = "https://translate.yandex.net";
     private static final String API_KEY = "trnsl.1.1.20170403T203024Z.e1c296e170563e6b.112043154a95d73055b48634e4607682bdd23817";
 
     private String translationDirection;
-    private onTranslationListener callbackToActivity;
 
     private EditText inputField;
-    private ImageButton button;
+
 
     public static RequestFragment newInstance(String word){
         Bundle arguments = new Bundle();
@@ -45,20 +43,34 @@ public class RequestFragment extends Fragment{
         return fragment;
     }
 
-    public interface onTranslationListener {
-        void onTranslation(Word word);
-    }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            callbackToActivity = (onTranslationListener) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " must implement onTranslationListener interface");
+    public void onClick() {
+        String word = inputField.getText().toString();
+        if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
+            errorToast();
         }
+        if (latin(word)) translationDirection = "en-ru";
+        if (cyrillic(word)) translationDirection = "ru-en";
+
+
+        HttpApiService httpApiService = RetrofitLab.getSingleInstance(BASE_URL).create(HttpApiService.class);
+        Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, translationDirection, word);
+        call.enqueue(new Callback<TranslationModel>() {
+
+            @Override
+            public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
+                String translation = response.body().getText().get(0);
+                WordLab.getSingleInstance(getActivity()).addNewWord(new Word(inputField.getText().toString(), translation));
+            }
+
+            @Override
+            public void onFailure(Call<TranslationModel> call, Throwable t) {
+                errorToast();
+            }
+
+        });
     }
+
 
     @Nullable
     @Override
@@ -66,36 +78,6 @@ public class RequestFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         inputField = view.findViewById(R.id.input_field);
         inputField.setText(getArguments().getString(ARGUMENTS_WORD));
-        button = view.findViewById(R.id.go_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String word = inputField.getText().toString();
-                if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
-                    errorToast();
-                    return;
-                }
-                if (latin(word)) translationDirection = "en-ru";
-                if (cyrillic(word)) translationDirection = "ru-en";
-
-                final HttpApiService httpApiService = RetrofitLab.getSingleInstance(BASE_URL).create(HttpApiService.class);
-                Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, translationDirection, word);
-                call.enqueue(new Callback<TranslationModel>() {
-                    @Override
-                    public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
-                        String translation = response.body().getText().get(0);
-                        Word objWord = new Word(word, translation);
-                        WordLab.getSingleInstance(getActivity()).addNewWord(objWord);
-                        callbackToActivity.onTranslation(objWord);
-                    }
-
-                    @Override
-                    public void onFailure(Call<TranslationModel> call, Throwable t) {
-                        errorToast();
-                    }
-                });
-            }
-        });
 
         return view;
     }

@@ -5,16 +5,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends FragmentActivity
-        implements RequestFragment.onTranslationListener, ListFragment.onSelectWordListener{
+        implements ListFragment.onSelectWordListener{
 
     private static final String REQUEST_FRAGMENT_TAG = "paveltitov.yprompter.request_fragment";
     public static final String LIST_FRAGMENT_TAG = "paveltitov.yprompter.list_fragment";
 
+
+    public interface OnClickButtonListener{
+        void onClick();
+    }
+
+    private OnClickButtonListener callbackToFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,22 @@ public class MainActivity extends FragmentActivity
                     .commit();
         }
 
+        callbackToFragment = (OnClickButtonListener) requestFragment;
+        ImageButton button = findViewById(R.id.go_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                callbackToFragment.onClick();
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG)
+                        .commit();
+            }
+        });
+
+
         Fragment fragmentList = fragmentManager.findFragmentById(R.id.list_fragment_container);
         if (fragmentList == null) {
             fragmentList = new ListFragment();
@@ -46,13 +70,6 @@ public class MainActivity extends FragmentActivity
     }
 
 
-    @Override
-    public void onTranslation(Word word) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG)
-                .commit();
-    }
 
     @Override
     public void onSelectingWord(Word word) {
