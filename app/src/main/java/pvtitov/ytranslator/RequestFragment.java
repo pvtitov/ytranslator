@@ -44,38 +44,11 @@ public class RequestFragment extends Fragment implements OnClickButtonListener{
     }
 
     public interface OnTranslationResponseListener{
-        void onResponse();
+        void onTranslationResponse();
     }
     OnTranslationResponseListener callbackToActivity;
 
 
-    public void onClickButton() {
-        String word = inputField.getText().toString();
-        if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
-            errorToast();
-        }
-        if (latin(word)) translationDirection = "en-ru";
-        if (cyrillic(word)) translationDirection = "ru-en";
-
-
-        HttpApiService httpApiService = RetrofitLab.getSingleInstance(BASE_URL).create(HttpApiService.class);
-        Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, translationDirection, word);
-        call.enqueue(new Callback<TranslationModel>() {
-
-            @Override
-            public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
-                String translation = response.body().getText().get(0);
-                WordLab.getSingleInstance(getActivity()).addNewWord(new Word(inputField.getText().toString(), translation));
-                callbackToActivity.onResponse();
-            }
-
-            @Override
-            public void onFailure(Call<TranslationModel> call, Throwable t) {
-                errorToast();
-            }
-
-        });
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -109,6 +82,37 @@ public class RequestFragment extends Fragment implements OnClickButtonListener{
         Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
         Matcher matcher = pattern.matcher(string);
         return matcher.matches();
+    }
+
+
+    @Override
+    public void onClickButton() {
+        String word = inputField.getText().toString();
+        if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
+            errorToast();
+            return;
+        }
+        if (latin(word)) translationDirection = "en-ru";
+        if (cyrillic(word)) translationDirection = "ru-en";
+
+
+        HttpApiService httpApiService = RetrofitLab.getSingleInstance(BASE_URL).create(HttpApiService.class);
+        Call<TranslationModel> call = httpApiService.getTranslation(API_KEY, translationDirection, word);
+        call.enqueue(new Callback<TranslationModel>() {
+
+            @Override
+            public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
+                String translation = response.body().getText().get(0);
+                WordLab.getSingleInstance(getActivity()).addNewWord(new Word(inputField.getText().toString(), translation));
+                callbackToActivity.onTranslationResponse();
+            }
+
+            @Override
+            public void onFailure(Call<TranslationModel> call, Throwable t) {
+                errorToast();
+            }
+
+        });
     }
 
     private void errorToast(){

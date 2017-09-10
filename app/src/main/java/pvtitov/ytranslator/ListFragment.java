@@ -27,7 +27,7 @@ public class ListFragment extends Fragment {
     private ListAdapter listAdapter;
 
     public interface onSelectWordListener{
-        void onSelectingWord(Word word);
+        void onSelectingWord(String word);
     }
     private onSelectWordListener callbackToActivity;
 
@@ -57,12 +57,6 @@ public class ListFragment extends Fragment {
         flexboxLayoutManager.setJustifyContent(JustifyContent.SPACE_BETWEEN);
         recyclerView.setLayoutManager(flexboxLayoutManager);
 
-        updateUI();
-
-        return view;
-    }
-
-    private void updateUI() {
         List<Word> words = WordLab.getSingleInstance(getActivity()).getListOfWords();
         if (listAdapter == null) {
             listAdapter = new ListAdapter(words);
@@ -71,7 +65,10 @@ public class ListFragment extends Fragment {
             listAdapter.setWords(words);
             listAdapter.notifyDataSetChanged();
         }
+
+        return view;
     }
+
 
     private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Word word;
@@ -91,7 +88,7 @@ public class ListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            callbackToActivity.onSelectingWord(word);
+            callbackToActivity.onSelectingWord(word.getWord());
             new SubstituteTask(wordTextView, word).execute();
         }
     }

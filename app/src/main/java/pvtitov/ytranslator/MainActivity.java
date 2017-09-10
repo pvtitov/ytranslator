@@ -59,18 +59,20 @@ public class MainActivity extends FragmentActivity
     }
 
 
+    // This code executes when called from ListFragment by click on an item.
+    // It updates RequestFragment with String argument which should be assigned to EditText.
 
     @Override
-    public void onSelectingWord(Word word) {
+    public void onSelectingWord(String word) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.request_fragment_container, RequestFragment.newInstance(word.getWord()), REQUEST_FRAGMENT_TAG)
+                .replace(R.id.request_fragment_container, RequestFragment.newInstance(word), REQUEST_FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
-    public void onResponse(){
+    public void onTranslationResponse(){
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.list_fragment_container, new ListFragment(), LIST_FRAGMENT_TAG)
