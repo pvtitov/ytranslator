@@ -25,7 +25,7 @@ import retrofit2.Response;
  * Created by Павел on 11.06.2017.
  */
 
-public class RequestFragment extends Fragment implements MainActivity.OnClickButtonListener{
+public class RequestFragment extends Fragment implements OnClickButtonListener{
     private  static final String ARGUMENTS_WORD = "word";
     private static final String BASE_URL = "https://translate.yandex.net";
     private static final String API_KEY = "trnsl.1.1.20170403T203024Z.e1c296e170563e6b.112043154a95d73055b48634e4607682bdd23817";
@@ -43,8 +43,13 @@ public class RequestFragment extends Fragment implements MainActivity.OnClickBut
         return fragment;
     }
 
-    @Override
-    public void onClick() {
+    public interface OnTranslationResponseListener{
+        void onResponse();
+    }
+    OnTranslationResponseListener callbackToActivity;
+
+
+    public void onClickButton() {
         String word = inputField.getText().toString();
         if (TextUtils.isEmpty(word) || (!latin(word) && !cyrillic(word))) {
             errorToast();
@@ -61,6 +66,7 @@ public class RequestFragment extends Fragment implements MainActivity.OnClickBut
             public void onResponse(Call<TranslationModel> call, Response<TranslationModel> response) {
                 String translation = response.body().getText().get(0);
                 WordLab.getSingleInstance(getActivity()).addNewWord(new Word(inputField.getText().toString(), translation));
+                callbackToActivity.onResponse();
             }
 
             @Override
@@ -69,6 +75,17 @@ public class RequestFragment extends Fragment implements MainActivity.OnClickBut
             }
 
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            callbackToActivity = (OnTranslationResponseListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement onSelectWordListener interface");
+        }
     }
 
 

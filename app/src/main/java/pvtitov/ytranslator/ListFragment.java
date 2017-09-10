@@ -26,11 +26,10 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
 
-    private onSelectWordListener callbackToActivity;
-
     public interface onSelectWordListener{
         void onSelectingWord(Word word);
     }
+    private onSelectWordListener callbackToActivity;
 
     @Override
     public void onAttach(Context context) {
