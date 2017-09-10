@@ -39,8 +39,9 @@ public class MainActivity extends FragmentActivity
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickButtonListener onClickListener = (OnClickButtonListener) fragment;
-                onClickListener.onClickButton();
+                    OnClickButtonListener onClickListener = fragment;
+                    onClickListener.onClickButton();
+
             }
         });
 

@@ -5,5 +5,5 @@ package pvtitov.ytranslator;
  */
 
 public interface OnClickButtonListener {
-    public void onClickButton();
+    void onClickButton();
 }
